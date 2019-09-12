@@ -1,10 +1,16 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
+import Vue from 'vue';
+import App from './App.vue';
+import $ from 'jquery';
 
-Vue.config.productionTip = false
+import './plugins';
+import routes from './routes';
 
-new Vue({
-  router,
+window.$ = $;
+require('./assets/css/main.css');
+
+Vue.config.productionTip = false;
+
+export default new Vue({
+  router: routes,
   render: h => h(App)
 }).$mount('#app')
