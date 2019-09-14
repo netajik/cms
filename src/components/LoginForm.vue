@@ -15,11 +15,11 @@
           <form action="" @submit.prevent="loginUser" data-vv-scope="loginForm">
             <div class="form-group">
               <label for="username">Username</label>
-              <input type="text" class="form-control" v-validate="'required'" v-model="username">
+              <input type="text" class="form-control" v-validate="'required'" v-model="user.username">
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input type="password" v-validate="'required'" class="form-control" v-model="password">
+              <input type="password" v-validate="'required'" class="form-control" v-model="user.password">
             </div>
             <button class="btn btn-primary" @click="loginUser" @keyup.enter="loginUser">Login</button>
           </form>
@@ -63,14 +63,13 @@ import mappings from '../mappings';
 export default {
   data() {
     return {
-      username: null,
-      password: null,
+      /*username: null,
+      password: null,*/
       user: {
         username: null,
         password: null,
         email: null
       },
-
       loginErrorMsg: null,
       singupErrorMsg: null,
 
@@ -84,7 +83,9 @@ export default {
     loginUser() {
       if (!this.isLoading) {
         let that = this;
-        that.isLoading = true;
+        localStorage.setItem("user", JSON.stringify(that.user));
+        that.$router.push(mappings.DASHBOARD);
+        /*that.isLoading = true;
         this.loginErrorMsg = null;
         this.$validator.validateAll("loginForm").then((result) => {
           if (result) {
@@ -98,11 +99,13 @@ export default {
               that.isLoading = false;
             });
           }
-        })
+        })*/
       }
     },
     registerUser() {
-      if (!this.isLoading) {
+    	localStorage.setItem("user", JSON.stringify(this.user));
+      this.$router.push(mappings.DASHBOARD);
+      /*if (!this.isLoading) {
         let that = this;
         that.isLoading = true;
         this.singupErrorMsg = null;
@@ -120,7 +123,7 @@ export default {
           }
         })
       }
-
+*/
     }
   }
 }

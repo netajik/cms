@@ -1,0 +1,66 @@
+<template>
+	<div>
+		<table class="table table-bordered">
+	    <thead>
+	      <tr>
+	        <th>Name</th>
+	        <th>Status</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      <tr v-for="group in groups"
+	      		class="clickable"
+	      		v-on:click="gotoGroup(group)">
+	        <td><icon name="users" class="text-info" style="margin-right:5px;"></icon> {{group.name}}</td>
+	        <td>
+	        	<button v-show="group.status==1"
+	        					class="btn btn-success"
+	        					>Make Inactive</button>
+	        	<button
+	        					v-show="group.status==2"
+	        					class="btn btn-danger"
+	        					>Make Active</button>
+	        </td>
+	      </tr>
+	    </tbody>
+	  </table>
+	</div>
+</template>
+<script type="text/javascript">
+import mappings from '@/mappings';
+import Icon from 'vue-awesome/components/Icon';
+export default {
+	components: {
+		Icon
+	},
+	data() {
+		return{
+			groups: null
+		}
+	},
+	created() {
+
+	},
+	mounted() {
+		this.getGroups();
+	},
+	methods: {
+		getGroups() {
+			var groups = [
+				{ id:1,name:"Managers",status:1 },
+				{ id:2,name:"Front-end Developers",status:1 },
+				{ id:3,name: "Back-end Developer", status:1 }
+			];
+			this.groups = groups;
+		},
+		changeStatus() {
+
+		},
+		gotoGroup(group) {console.log(group);
+			var url = mappings.GROUP_URL.replace(":groupId",group.id);
+			console.log(url);
+			this.$router.push(url);
+		}
+	}
+}
+</script>
