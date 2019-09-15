@@ -52,6 +52,14 @@ export default {
 	},
 	methods: {
 		getGroups() {
+<<<<<<< HEAD
+=======
+			var groups = [
+				{ id:1,name:"Managers",status:1 },
+				{ id:2,name:"Front-end Developers",status:1 },
+				{ id:3,name: "Back-end Developer", status:1 }
+			];
+>>>>>>> 82077775559b6492bf1a55dcf9f17b1be10cd771
 			this.groups = groups;
 		},
 		changeStatus() {

@@ -19,4 +19,5 @@ export default {
 		var user = this.getCurrentUser();
 		return user.userId;
 	}
+
 }

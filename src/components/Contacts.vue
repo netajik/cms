@@ -1,8 +1,5 @@
 <template>
 	<div>
-		<div>
-			<span></span>
-		</div>
 		<div class="text-right mb-2">
 			<button type="button" class="btn btn-info" v-on:click="$bus.$emit('open-contact-modal')">Create Contact</button>
 		</div>
