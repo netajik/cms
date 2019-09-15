@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-dark bg-info">
+    <nav class="navbar navbar-dark navbar-custom" style="background-color: ">
       <a class="navbar-brand" href="#">
         <img src="/docs/4.0/assets/brand/bootstrap-solid.svg" width="40" height="40" class="d-inline-block align-top" alt="">
         <img :src="require('./assets/logo.png')" class="logo" alt="">

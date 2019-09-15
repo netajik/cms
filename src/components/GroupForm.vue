@@ -20,7 +20,7 @@
 					</form>
 	      </div>
 	      <div class="modal-footer">
-	      	<button type="button" class="btn btn-primary">Submit</button>
+	      	<button type="button" class="btn btn-primary" v-on:click="saveGroup($event)">Submit</button>
 	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
@@ -28,6 +28,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+import groupService from "@/services/groupService";
 export default {
 	data() {
 		return {
@@ -39,9 +40,6 @@ export default {
 		}
 	},
 	create() {
-		$(this.$refs.modal).on("hide.bs.modal", function() {
-     // that.$emit("hide");
-    });
 	},
 	mounted() {
 		var that = this;
@@ -50,7 +48,14 @@ export default {
 		});
 	},
 	methods: {
-
+		saveGroup(event) {
+			var that = this;
+			var dataSaved=groupService.saveGroup(that.group);
+			if(dataSaved){
+				$(this.$refs.modal).modal("hide");
+				that.$bus.$emit("new-group-added");
+			}
+		}
 	}
 }
 </script>

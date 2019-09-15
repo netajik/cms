@@ -1,11 +1,9 @@
 export default {
 	loginUser(user){
-		//var promise = new
-		//var promise = $.Deferred();
 		var users = JSON.parse(localStorage.getItem("users"));
 		var userDetails = _.filter(users,function(obj){
 			return (obj.username==user.username) && (obj.password==user.password);
-		});console.log(userDetails);
+		});
 		return userDetails[0].username == user.username;
 	},
 	saveUser(user) {
@@ -16,8 +14,12 @@ export default {
 		return JSON.parse(user);
 	},
 	getUserId() {
-		var user = this.getCurrentUser();
-		return user.userId;
+		var users = JSON.parse(localStorage.getItem("users"));
+		var user = JSON.parse(localStorage.getItem("user"));
+		var userDetails = _.filter(users,function(obj){
+			return (obj.username==user.username);
+		});
+		return userDetails[0].userId;
 	}
 
 }

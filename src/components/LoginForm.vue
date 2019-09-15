@@ -85,7 +85,7 @@ export default {
         //this.$validator.validateAll("loginForm").then((result) => {
           //if (result) {
 		        var isValidUser = userService.loginUser(that.user);
-		        if(isValidUser){window.alert("true");
+		        if(isValidUser){
 		        	localStorage.setItem("user", JSON.stringify(this.user));
 		        	that.$router.push(mappings.DASHBOARD);
 		        } else{

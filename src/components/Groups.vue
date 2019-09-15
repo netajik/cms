@@ -11,20 +11,24 @@
 	      </tr>
 	    </thead>
 	    <tbody>
-	      <tr v-for="group in groups"
-	      		class="clickable"
-	      		v-on:click="gotoGroup(group)">
-	        <td><icon name="users" class="text-info" style="margin-right:5px;"></icon> {{group.name}}</td>
+	      <tr v-for="(group,index) in groups"
+	      		class="clickable">
+	        <td v-on:click="gotoGroup(group)"><icon name="users" class="text-info" style="margin-right:5px;"></icon> {{group.name}}</td>
 	        <td>
 	        	<button v-show="group.status==1"
 	        					class="btn btn-success"
+	        					v-on:click="changeStatus($event,group,index)"
 	        					>Make Inactive</button>
 	        	<button
 	        					v-show="group.status==2"
 	        					class="btn btn-danger"
+	        					v-on:click="changeStatus($event,group,index)"
 	        					>Make Active</button>
 	        </td>
 	      </tr>
+	      <tr v-if="groups.length==0">
+        	<td colspan="2">No data found</td>
+        </tr>
 	    </tbody>
 	  </table>
 	  <group-form></group-form>
@@ -34,6 +38,7 @@
 import mappings from '@/mappings';
 import Icon from 'vue-awesome/components/Icon';
 import GroupForm from '@/components/GroupForm';
+import groupService from '@/services/groupService';
 export default {
 	components: {
 		Icon,
@@ -41,34 +46,40 @@ export default {
 	},
 	data() {
 		return{
-			groups: null
+			groups: []
 		}
 	},
 	created() {
 
 	},
 	mounted() {
+		var that = this;
 		this.getGroups();
+		this.$bus.$on("new-group-added", function(){
+			that.getGroups();
+		});
 	},
 	methods: {
 		getGroups() {
-<<<<<<< HEAD
-=======
-			var groups = [
-				{ id:1,name:"Managers",status:1 },
-				{ id:2,name:"Front-end Developers",status:1 },
-				{ id:3,name: "Back-end Developer", status:1 }
-			];
->>>>>>> 82077775559b6492bf1a55dcf9f17b1be10cd771
-			this.groups = groups;
+			this.groups = groupService.getGroups();
 		},
-		changeStatus() {
+		gotoGroup(group) {
+			if(group.status ==1){
+				var url = mappings.GROUP_URL.replace(":groupId",group.id);
+				this.$router.push(url);
+			}else{
+				window.alert("Please change group status to Active to view the group details.");
+			}
 
 		},
-		gotoGroup(group) {console.log(group);
-			var url = mappings.GROUP_URL.replace(":groupId",group.id);
-			console.log(url);
-			this.$router.push(url);
+		changeStatus(event,group,index){
+			var that = this;
+			var updateStatus = "";
+			updateStatus= groupService.changeStatus(group);
+			event.preventDefault();
+			if(updateStatus =="yes"){
+				this.groups[index].status = (group.status==1)?2:1;
+			} else{}
 		}
 	}
 }

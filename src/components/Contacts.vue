@@ -15,7 +15,7 @@
 	      </tr>
 	    </thead>
 	    <tbody>
-	      <tr v-for="contact in contacts">
+	      <tr v-for="(contact,index) in contacts">
 	        <td><icon name="phone" class="text-info" style="margin-right:5px;"></icon></i>{{contact.firstName}}</td>
 	        <td>{{contact.lastName}}</td>
 	        <td>{{contact.email}}</td>
@@ -24,13 +24,18 @@
 	        <td>
 	        	<button v-show="contact.status==1"
 	        					class="btn btn-success"
+	        					v-on:click="changeStatus(contact,index)"
 	        					>Make Inactive</button>
 	        	<button
 	        					v-show="contact.status==2"
 	        					class="btn btn-danger"
+	        					v-on:click="changeStatus(contact,index)"
 	        					>Make Active</button>
 	        </td>
 	      </tr>
+	      <tr v-if="contacts.length==0">
+        	<td colspan="6">No data found</td>
+        </tr>
 	    </tbody>
 	  </table>
 	  <contact-form></contact-form>
@@ -38,13 +43,12 @@
 </template>
 <script type="text/javascript">
 import mappings from "@/mappings";
-import Pagination from "@/components/helpers/Pagination";
 import Icon from "vue-awesome/components/Icon";
 import ContactForm from "@/components/ContactForm";
 import contactsService from "@/services/contactsService";
+import groupService from "@/services/groupService";
 export default {
 	components:{
-		Pagination,
 		Icon,
 		ContactForm
 	},
@@ -53,7 +57,7 @@ export default {
 	},
 	data(){
 		return {
-			contacts: null,
+			contacts: [],
 			group: null,
 		}
 	},
@@ -61,11 +65,15 @@ export default {
 
 	},
 	mounted() {
+		var that = this;
 		if(this.groupId){
 			this.getGroupContacts(this.groupId);
 		}else{
 			this.getContacts();
 		}
+		this.$bus.$on("new-contact-added", function(){
+			that.getContacts();
+		});
 	},
 	methods: {
 		getGroupContacts: function(groupId){
@@ -75,6 +83,14 @@ export default {
 		},
 		getContacts() {
 			this.contacts = contactsService.getContacts();
+		},
+		changeStatus(contact,index){
+			var that = this;
+			var updateStatus = "";
+			updateStatus=contactsService.changeStatus(contact);
+			if(updateStatus =="yes"){
+				this.contacts[index].status = (contact.status==1)?2:1;
+			} else{}
 		}
 	}
 }

@@ -60,7 +60,7 @@
 					</form>
 	      </div>
 	      <div class="modal-footer">
-	      	<button type="button" class="btn btn-primary">Submit</button>
+	      	<button type="button" class="btn btn-primary" v-on:click="saveContact($event)">Submit</button>
 	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
@@ -68,6 +68,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+import contactsService from "@/services/contactsService";
 export default {
 	data() {
 		return {
@@ -76,14 +77,12 @@ export default {
 				lastName: null,
 				email: null,
 				aadhar: null,
-				phone: null
+				phone: null,
+				status: 1
 			}
 		}
 	},
 	create() {
-		$(this.$refs.modal).on("hide.bs.modal", function() {
-     // that.$emit("hide");
-    });
 	},
 	mounted() {
 		var that = this;
@@ -92,7 +91,14 @@ export default {
 		});
 	},
 	methods: {
-
+		saveContact(event) {
+			var that = this;
+			var dataSaved=contactsService.saveContact(that.contact);
+			if(dataSaved == "yes"){
+				$(this.$refs.modal).modal("hide");
+				that.$bus.$emit("new-contact-added");
+			}
+		}
 	}
 }
 </script>
