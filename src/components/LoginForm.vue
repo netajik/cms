@@ -4,7 +4,7 @@
       <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
           <a class="nav-item nav-link active" id="nav_login" data-toggle="tab" href="#login" role="tab" aria-controls="nav-home" aria-selected="true">Login</a>
-          <a class="nav-item nav-link" id="nav_register" data-toggle="tab" href="#register" role="tab" aria-controls="nav-profile" aria-selected="false">Register</a>
+          <a class="nav-item nav-link" id="nav_register" data-toggle="tab" href="#register" role="tab" aria-controls="nav-profile" aria-selected="false">SingnUp</a>
         </div>
       </nav>
       <div class="tab-content mt-2" id="nav-tabContent">
@@ -28,7 +28,7 @@
           <div v-if="singupErrorMsg" class="alert alert-danger">
             {{singupErrorMsg}}
           </div>
-          <form action="" @submit.prevent="registerUser" data-vv-scope="signupForm">
+          <form action="" @submit.prevent="saveUser" data-vv-scope="signupForm">
             <div class="form-group">
               <label for="username">Username</label>
               <input type="text" class="form-control" v-validate="'required'" v-model="user.username">
@@ -41,7 +41,7 @@
               <label for="password">Password</label>
               <input type="password" class="form-control" v-validate="'required'" v-model="user.password" @keyup.enter="registerUser">
             </div>
-            <button class="btn btn-primary" @click="registerUser">Register</button>
+            <button class="btn btn-primary" @click="saveUser">Sign Up</button>
           </form>
         </div>
       </div>
@@ -57,14 +57,11 @@
 </style>
 <script type="text/javascript">
 import userService from '../services/userService';
-
 import mappings from '../mappings';
 
 export default {
   data() {
     return {
-      /*username: null,
-      password: null,*/
       user: {
         username: null,
         password: null,
@@ -83,47 +80,41 @@ export default {
     loginUser() {
       if (!this.isLoading) {
         let that = this;
-        localStorage.setItem("user", JSON.stringify(that.user));
-        that.$router.push(mappings.DASHBOARD);
-        /*that.isLoading = true;
+        that.isLoading = true;
         this.loginErrorMsg = null;
-        this.$validator.validateAll("loginForm").then((result) => {
-          if (result) {
-            userService.loginUser(that.username, that.password).then(function(data) {
-              if (data.user) {
-                localStorage.setItem("user", JSON.stringify(data.user));
-                that.$router.push(mappings.ROOT_URL);
-              } else {
-                that.loginErrorMsg = data.message;
-              }
-              that.isLoading = false;
-            });
-          }
-        })*/
+        //this.$validator.validateAll("loginForm").then((result) => {
+          //if (result) {
+		        var isValidUser = userService.loginUser(that.user);
+		        if(isValidUser){window.alert("true");
+		        	localStorage.setItem("user", JSON.stringify(this.user));
+		        	that.$router.push(mappings.DASHBOARD);
+		        } else{
+		        	 that.loginErrorMsg = "";
+		        }
+		        that.isLoading = false;
+          //}
+        //});
       }
     },
-    registerUser() {
+    saveUser() {
     	localStorage.setItem("user", JSON.stringify(this.user));
       this.$router.push(mappings.DASHBOARD);
-      /*if (!this.isLoading) {
+      if (!this.isLoading) {
         let that = this;
         that.isLoading = true;
         this.singupErrorMsg = null;
-        that.$validator.validateAll("signupForm").then((result) => {
-          if (result) {
-            userService.registerUser(this.user).then(function(data) {
-              if (data.user) {
-                localStorage.setItem("user", JSON.stringify(data.user));
-                that.$router.push(mappings.ROOT_URL);
-              } else {
-                that.singupErrorMsg = data.message;
-              }
-              that.isLoading = false;
-            });
-          }
-        })
+        //that.$validator.validateAll("signupForm").then((result) => {
+          //if (result) {
+            //var isSaved = userService.saveUser(this.user).then(function(data) {
+            if (isSaved){
+              that.$router.push(mappings.DASHBOARD);
+            } else {
+              that.singupErrorMsg = "";
+            }
+            that.isLoading = false;
+          //}
+        //});
       }
-*/
     }
   }
 }

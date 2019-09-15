@@ -1,5 +1,8 @@
 <template>
 	<div>
+		<div class="text-right mb-2">
+			<button type="button" class="btn btn-info" v-on:click="$bus.$emit('open-group-modal')">Create Group</button>
+		</div>
 		<table class="table table-bordered">
 	    <thead>
 	      <tr>
@@ -24,14 +27,17 @@
 	      </tr>
 	    </tbody>
 	  </table>
+	  <group-form></group-form>
 	</div>
 </template>
 <script type="text/javascript">
 import mappings from '@/mappings';
 import Icon from 'vue-awesome/components/Icon';
+import GroupForm from '@/components/GroupForm';
 export default {
 	components: {
-		Icon
+		Icon,
+		GroupForm
 	},
 	data() {
 		return{
@@ -46,11 +52,6 @@ export default {
 	},
 	methods: {
 		getGroups() {
-			var groups = [
-				{ id:1,name:"Managers",status:1 },
-				{ id:2,name:"Front-end Developers",status:1 },
-				{ id:3,name: "Back-end Developer", status:1 }
-			];
 			this.groups = groups;
 		},
 		changeStatus() {

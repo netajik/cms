@@ -1,5 +1,11 @@
 <template>
 	<div>
+		<div>
+			<span></span>
+		</div>
+		<div class="text-right mb-2">
+			<button type="button" class="btn btn-info" v-on:click="$bus.$emit('open-contact-modal')">Create Contact</button>
+		</div>
 		<table class="table table-bordered">
 	    <thead>
 	      <tr>
@@ -30,49 +36,48 @@
 	      </tr>
 	    </tbody>
 	  </table>
-	  <pagination></pagination>
+	  <contact-form></contact-form>
 	</div>
 </template>
 <script type="text/javascript">
+import mappings from "@/mappings";
 import Pagination from "@/components/helpers/Pagination";
-import Icon from 'vue-awesome/components/Icon';
+import Icon from "vue-awesome/components/Icon";
+import ContactForm from "@/components/ContactForm";
+import contactsService from "@/services/contactsService";
 export default {
 	components:{
 		Pagination,
-		Icon
+		Icon,
+		ContactForm
 	},
 	props: {
 		groupId: null
 	},
 	data(){
 		return {
-			contacts: null
+			contacts: null,
+			group: null,
 		}
 	},
 	created(){
 
 	},
 	mounted() {
-		this.getContacts(this.groupId);
+		if(this.groupId){
+			this.getGroupContacts(this.groupId);
+		}else{
+			this.getContacts();
+		}
 	},
 	methods: {
-		getContacts: function(id){
-			var contacts = [
-				{firstName:"Rama",lastName:"Rao",aadhar:"234523456781",email:"@inmar.com",phone:"9945678945",status:1,groupId:1},
-				{firstName:"Pavan",lastName:"kumar",aadhar:"234523456782",email:"@inmar.com",phone:"9945678945",status:1,groupId:1},
-				{firstName:"Ram",lastName:"Varma",aadhar:"234523456789234523456783",email:"@inmar.com",phone:"9945678945",status:1,groupId:1},
-				{firstName:"Poorna",lastName:"Shekar",aadhar:"234523456784",email:"@inmar.com",phone:"9945678945",status:1,groupId:2 },
-				{firstName:"Veera",lastName:"Bhadram",aadhar:"234523456785",email:"@inmar.com",phone:"9945678945",status:1,groupId:2 },
-				{firstName:"Shankar",lastName:"Rao",aadhar:"234523456786",email:"@inmar.com",phone:"9945678945",status:1,groupId:3 },
-				{firstName:"Appala",lastName:"Naidu",aadhar:"23452345677",email:"@inmar.com",phone:"9945678945",status:1,groupId:3 }
-			];
-			if(id){
-				this.contacts = _.filter(contacts, function(contact){
-					return contact.groupId == id;
-				});
-			} else{
-				this.contacts = contacts;
-			}
+		getGroupContacts: function(groupId){
+			var groupContacts = groupService.getGroupContacts(groupId);
+			this.group = groupContacts[0];
+			this.contacts = groupContacts[1];
+		},
+		getContacts() {
+			this.contacts = contactsService.getContacts();
 		}
 	}
 }
